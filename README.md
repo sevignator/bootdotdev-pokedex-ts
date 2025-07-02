@@ -3,6 +3,7 @@
 ## Requirements
 
 - NVM (or Node.js 22.15.0)
+- PNPM
 
 ## Setup
 
