@@ -1,0 +1,7 @@
+
+> bootdotdev-pokedex-ts@1.0.0 dev /Users/msevigny/Projects/github.com/sevignator/bootdotdev-pokedex-ts
+> tsc && node dist/main.js
+
+Pokedex > Your command was: charmander
+Pokedex > Your command was: pikachu
+Pokedex > 
