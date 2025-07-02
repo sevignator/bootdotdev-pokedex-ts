@@ -1,4 +1,5 @@
 import { createInterface } from "node:readline/promises";
+import { getCommands } from "./commands/index.js";
 
 export function cleanInput(input: string): string[] {
   const words = input.toLowerCase().trim().split(" ");
@@ -19,14 +20,21 @@ export async function startREPL() {
   // Listen for user input
   readline.on("line", (input) => {
     const words = cleanInput(input);
+    const command = words[0];
+    const commands = getCommands();
 
     // Exit early if no input was provided
-    if (words.length === 0) {
+    if (command === "") {
       readline.prompt();
       return;
     }
 
-    console.log(`Your command was: ${words[0]}`);
+    if (commands[command]) {
+      commands[command].callback(commands);
+    } else {
+      console.log("Unknown command");
+    }
+
     readline.prompt();
   });
 
