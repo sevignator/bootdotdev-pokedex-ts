@@ -1,4 +1,4 @@
-import { type State } from './state.js';
+import { Cache } from './pokecache.js';
 
 interface ShallowLocation {
   name: string;
@@ -12,30 +12,24 @@ interface LocationAreasData {
 }
 
 export class PokeAPI {
-  private static state: State | null;
-  private readonly baseURL = 'https://pokeapi.co/api/v2';
-
-  static setState(state: State) {
-    PokeAPI.state = state;
-  }
+  private static readonly baseURL = 'https://pokeapi.co/api/v2';
+  public cache = new Cache(100000);
 
   async fetchLocationAreas(pageURL: string | null) {
-    if (!PokeAPI.state) {
-      throw new Error(
-        "There was an issue while loading the program's state in the PokeAPI."
-      );
-    }
-
     try {
-      const endpoint = pageURL ? pageURL : `${this.baseURL}/location-area`;
+      const endpoint = pageURL ? pageURL : `${PokeAPI.baseURL}/location-area`;
+      const cachedData = this.cache.get<LocationAreasData>(endpoint);
+
+      if (cachedData) {
+        return cachedData;
+      }
+
       const res = await fetch(endpoint);
       const data: LocationAreasData = await res.json();
-      const { next, previous, results } = data;
 
-      PokeAPI.state.prevLocationsURL = previous;
-      PokeAPI.state.nextLocationsURL = next;
+      this.cache.add<LocationAreasData>(endpoint, data);
 
-      return results;
+      return data;
     } catch (e) {
       if (e instanceof Error) {
         console.log(e.message);
@@ -44,7 +38,7 @@ export class PokeAPI {
   }
 
   async fetchLocationArea(locationName: string) {
-    const endpoint = `${this.baseURL}/location-area/${locationName}`;
+    const endpoint = `${PokeAPI.baseURL}/location-area/${locationName}`;
     const res = await fetch(endpoint);
     const data = await res.json();
 
