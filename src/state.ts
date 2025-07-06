@@ -1,15 +1,9 @@
 import { createInterface, type Interface } from 'node:readline';
-import { getCommands, type CLICommandsRegistry } from './commands/index.js';
+import { getCommands } from './commands/index.js';
 
 export interface State {
   readlineInterface: Interface;
-  commandsRegistry: CLICommandsRegistry;
-}
-
-export interface CLICommand {
-  name: string;
-  description: string;
-  callback: (state: State) => void;
+  commandsRegistry: ReturnType<typeof getCommands>;
 }
 
 export function initState(): State {

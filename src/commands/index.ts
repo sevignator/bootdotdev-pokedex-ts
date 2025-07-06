@@ -1,10 +1,15 @@
 import { exitCommand } from './exitCommand.js';
 import { helpCommand } from './helpCommand.js';
-import { type CLICommand } from '../state.js';
 
-export type CLICommandsRegistry = Record<string, CLICommand>;
+import { type State } from '../state.js';
 
-export function getCommands(): CLICommandsRegistry {
+export interface CLICommand {
+  name: string;
+  description: string;
+  callback: (state: State) => void;
+}
+
+export function getCommands(): Record<string, CLICommand> {
   return {
     exit: {
       name: 'exit',
