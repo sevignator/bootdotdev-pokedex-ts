@@ -1,41 +1,34 @@
-import { createInterface } from "node:readline/promises";
-import { getCommands } from "./commands/index.js";
+import { type State } from './state.js';
 
 export function cleanInput(input: string): string[] {
-  const words = input.toLowerCase().trim().split(" ");
-  return words.filter((word) => word !== "");
+  const words = input.toLowerCase().trim().split(' ');
+  return words.filter((word) => word !== '');
 }
 
-export async function startREPL() {
-  // Generate the "readline" interface
-  const readline = createInterface({
-    input: process.stdin,
-    output: process.stdout,
-    prompt: "Pokedex > ",
-  });
+export async function startREPL(state: State) {
+  const { readlineInterface, commandsRegistry } = state;
 
   // Display the prompt to the user
-  readline.prompt();
+  readlineInterface.prompt();
 
   // Listen for user input
-  readline.on("line", (input) => {
+  readlineInterface.on('line', (input) => {
     const words = cleanInput(input);
-    const command = words[0];
-    const commands = getCommands();
+    const commandName = words[0];
 
     // Exit early if no input was provided
-    if (command === "") {
-      readline.prompt();
+    if (commandName === '') {
+      readlineInterface.prompt();
       return;
     }
 
-    if (commands[command]) {
-      commands[command].callback(commands);
+    if (commandsRegistry[commandName]) {
+      commandsRegistry[commandName].callback(state);
     } else {
-      console.log("Unknown command");
+      console.log('Unknown command');
     }
 
-    readline.prompt();
+    readlineInterface.prompt();
   });
 
   return;

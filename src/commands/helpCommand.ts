@@ -1,11 +1,13 @@
-import { type CLIRegistry } from "./index.js";
+import { type State } from '../state.js';
 
-export function helpCommand(registry: CLIRegistry) {
-  console.log("Welcome to the Pokedex!");
-  console.log("Usage:\n");
+export function helpCommand(state: State) {
+  const { commandsRegistry } = state;
 
-  for (const commandKey of Object.keys(registry)) {
-    const { name, description } = registry[commandKey];
+  console.log('Welcome to the Pokedex!');
+  console.log('Usage:\n');
+
+  for (const commandKey of Object.keys(commandsRegistry)) {
+    const { name, description } = commandsRegistry[commandKey];
     console.log(`${name}: ${description}`);
   }
 }
