@@ -1,13 +1,15 @@
+import { type State } from '../state.js';
+
 import { exitCommand } from './exitCommand.js';
 import { helpCommand } from './helpCommand.js';
 import { mapCommand } from './mapCommand.js';
 import { mapbCommand } from './mapbCommand.js';
-import { type State } from '../state.js';
+import { exploreCommand } from './exploreCommand.js';
 
 export interface CLICommand {
   name: string;
   description: string;
-  callback: (state: State) => Promise<void>;
+  callback: (state: State, ...args: string[]) => Promise<void>;
 }
 
 export function getCommands(): Record<string, CLICommand> {
@@ -28,9 +30,14 @@ export function getCommands(): Record<string, CLICommand> {
       callback: mapCommand,
     },
     mapb: {
-      name: 'map',
+      name: 'mapb',
       description: 'Goes back to the previous page of location area results',
       callback: mapbCommand,
+    },
+    explore: {
+      name: 'explore',
+      description: 'Explore a specific location area',
+      callback: exploreCommand,
     },
   };
 }

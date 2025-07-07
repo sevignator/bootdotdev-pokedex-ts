@@ -12,9 +12,10 @@ export async function startREPL(state: State) {
   readlineInterface.prompt();
 
   // Listen for user input
-  readlineInterface.on('line', (input) => {
+  readlineInterface.on('line', async (input) => {
     const words = cleanInput(input);
     const commandName = words[0];
+    const args = words.slice(1);
 
     // Exit early if no input was provided
     if (commandName === '') {
@@ -23,7 +24,7 @@ export async function startREPL(state: State) {
     }
 
     if (commandsRegistry[commandName]) {
-      commandsRegistry[commandName].callback(state);
+      await commandsRegistry[commandName].callback(state, ...args);
     } else {
       console.log('Unknown command');
     }

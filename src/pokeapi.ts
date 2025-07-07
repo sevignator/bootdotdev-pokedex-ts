@@ -11,6 +11,18 @@ interface LocationAreasData {
   results: ShallowLocation[];
 }
 
+interface LocationAreaData {
+  pokemon_encounters: PokemonEncounter[];
+}
+
+interface PokemonEncounter {
+  pokemon: {
+    name: string;
+    url: string;
+  };
+  version_details: any;
+}
+
 export class PokeAPI {
   private static readonly baseURL = 'https://pokeapi.co/api/v2';
   public cache = new Cache(100000);
@@ -38,10 +50,24 @@ export class PokeAPI {
   }
 
   async fetchLocationArea(locationName: string) {
-    const endpoint = `${PokeAPI.baseURL}/location-area/${locationName}`;
-    const res = await fetch(endpoint);
-    const data = await res.json();
+    try {
+      const endpoint = `${PokeAPI.baseURL}/location-area/${locationName}`;
+      const cachedData = this.cache.get<LocationAreaData>(endpoint);
 
-    return data;
+      if (cachedData) {
+        return cachedData;
+      }
+
+      const res = await fetch(endpoint);
+      const data: LocationAreaData = await res.json();
+
+      this.cache.add<LocationAreaData>(endpoint, data);
+
+      return data;
+    } catch (e) {
+      if (e instanceof Error) {
+        console.log(e.message);
+      }
+    }
   }
 }
