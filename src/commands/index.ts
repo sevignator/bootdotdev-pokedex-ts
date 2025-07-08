@@ -1,12 +1,12 @@
 import { type State } from '../state.js';
 
+import { catchCommand } from './catchCommand.js';
 import { exitCommand } from './exitCommand.js';
+import { exploreCommand } from './exploreCommand.js';
 import { helpCommand } from './helpCommand.js';
+import { inspectCommand } from './inspectCommand.js';
 import { mapCommand } from './mapCommand.js';
 import { mapbCommand } from './mapbCommand.js';
-import { exploreCommand } from './exploreCommand.js';
-import { catchCommand } from './catchCommand.js';
-import { inspectCommand } from './inspectCommand.js';
 import { pokedexCommand } from './pokedexCommand.js';
 
 export interface CLICommand {
@@ -17,10 +17,20 @@ export interface CLICommand {
 
 export function getCommands(): Record<string, CLICommand> {
   return {
+    catch: {
+      name: 'catch',
+      description: 'Attempt to catch a Pokémon using a pokéball',
+      callback: catchCommand,
+    },
     exit: {
       name: 'exit',
       description: 'Exit the Pokedex',
       callback: exitCommand,
+    },
+    explore: {
+      name: 'explore',
+      description: 'Explore a specific location area',
+      callback: exploreCommand,
     },
     help: {
       name: 'help',
@@ -36,16 +46,6 @@ export function getCommands(): Record<string, CLICommand> {
       name: 'mapb',
       description: 'Goes back to the previous page of location area results',
       callback: mapbCommand,
-    },
-    explore: {
-      name: 'explore',
-      description: 'Explore a specific location area',
-      callback: exploreCommand,
-    },
-    catch: {
-      name: 'catch',
-      description: 'Attempt to catch a Pokémon using a pokéball',
-      callback: catchCommand,
     },
     inspect: {
       name: 'inspect',
