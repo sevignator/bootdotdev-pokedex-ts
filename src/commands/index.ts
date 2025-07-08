@@ -6,6 +6,7 @@ import { mapCommand } from './mapCommand.js';
 import { mapbCommand } from './mapbCommand.js';
 import { exploreCommand } from './exploreCommand.js';
 import { catchCommand } from './catchCommand.js';
+import { inspectCommand } from './inspectCommand.js';
 
 export interface CLICommand {
   name: string;
@@ -44,6 +45,11 @@ export function getCommands(): Record<string, CLICommand> {
       name: 'catch',
       description: 'Attempt to catch a Pokémon using a pokéball',
       callback: catchCommand,
+    },
+    inspect: {
+      name: 'inspect',
+      description: 'Inspect a given Pokémon',
+      callback: inspectCommand,
     },
   };
 }

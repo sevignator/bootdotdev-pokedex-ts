@@ -14,8 +14,9 @@ export async function catchCommand(state: State, ...args: string[]) {
   console.log(`Throwing a Pokeball at ${pokemonName}...`);
 
   if (randomNumber < 25) {
-    console.log(`${pokemonName} was caught!`);
     state.pokedex.set(pokemonName, pokemonData);
+    console.log(`${pokemonName} was caught!`);
+    console.log('You may now inspect it with the inspect command.');
   } else {
     console.log(`${pokemonName} escaped!`);
   }
