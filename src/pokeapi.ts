@@ -20,7 +20,10 @@ interface PokemonEncounter {
     name: string;
     url: string;
   };
-  version_details: any;
+}
+
+export interface Pokemon {
+  name: string;
 }
 
 export class PokeAPI {
@@ -45,6 +48,8 @@ export class PokeAPI {
     } catch (e) {
       if (e instanceof Error) {
         console.log(e.message);
+      } else {
+        console.log(e);
       }
     }
   }
@@ -67,6 +72,32 @@ export class PokeAPI {
     } catch (e) {
       if (e instanceof Error) {
         console.log(e.message);
+      } else {
+        console.log(e);
+      }
+    }
+  }
+
+  async fetchPokemon(pokemonName: string) {
+    try {
+      const endpoint = `${PokeAPI.baseURL}/pokemon/${pokemonName}`;
+      const cachedData = this.cache.get<LocationAreaData>(endpoint);
+
+      if (cachedData) {
+        return cachedData;
+      }
+
+      const res = await fetch(endpoint);
+      const data = await res.json();
+
+      this.cache.add(endpoint, data);
+
+      return data;
+    } catch (e) {
+      if (e instanceof Error) {
+        console.log(e.message);
+      } else {
+        console.log(e);
       }
     }
   }
